@@ -29,6 +29,18 @@ void inorder_tree_walk(ostream & stream, const node<Key> * x) {
     }
 }
 
+template <typename Key>
+const node<Key> * tree_search(const node<Key> * x, const Key k) {
+    if (x == nullptr || k == x->key) {
+        return x;
+    }
+    if (k < x->k) {
+        return tree_search(x->left.get(), k);
+    } else {
+        return tree_search(x->right.get(), k);
+    }
+}
+
 } // namespace bst
 
 #endif // BST_BST_HPP
