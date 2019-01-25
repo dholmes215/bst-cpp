@@ -16,6 +16,11 @@ addons:
       - g++-8
       - libstdc++-8-dev
 
+install:
+ - pip install --user conan
+ - conan user
+ - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
 before_script:
   - mkdir build
   - cd build
