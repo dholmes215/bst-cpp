@@ -51,7 +51,8 @@ const U32Node example12_2 = [] {
 
 const string example12_2StrExpected{"2\n3\n4\n6\n7\n9\n13\n15\n17\n18\n20\n"};
 
-TEST(InorderTreeWalkTest, Example12_1_a) {
+TEST(InorderTreeWalkTest, Example12_1_a)
+{
     stringstream ss;
     inorder_tree_walk(ss, &example12_1_a);
     string str{istreambuf_iterator<char>(ss), {}};
@@ -59,19 +60,21 @@ TEST(InorderTreeWalkTest, Example12_1_a) {
     ASSERT_EQ(str, example12_1StrExpected);
 }
 
-TEST(InorderTreeWalkTest, Example12_1_b) {
+TEST(InorderTreeWalkTest, Example12_1_b)
+{
     stringstream ss;
     inorder_tree_walk(ss, &example12_1_b);
     string str{istreambuf_iterator<char>(ss), {}};
-    
+
     ASSERT_EQ(str, example12_1StrExpected);
 }
 
-TEST(InorderTreeWalkTest, Example12_2) {
+TEST(InorderTreeWalkTest, Example12_2)
+{
     stringstream ss;
     inorder_tree_walk(ss, &example12_2);
     string str{istreambuf_iterator<char>(ss), {}};
-    
+
     ASSERT_EQ(str, example12_2StrExpected);
 }
 

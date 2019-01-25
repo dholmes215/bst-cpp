@@ -21,7 +21,8 @@ template <typename Key> struct node
 };
 
 template <typename Key>
-void inorder_tree_walk(ostream & stream, const node<Key> * x) {
+void inorder_tree_walk(ostream & stream, const node<Key> * x)
+{
     if (x != nullptr) {
         inorder_tree_walk(stream, x->left.get());
         stream << x->key << '\n';
@@ -30,7 +31,8 @@ void inorder_tree_walk(ostream & stream, const node<Key> * x) {
 }
 
 template <typename Key>
-const node<Key> * tree_search(const node<Key> * x, const Key k) {
+const node<Key> * tree_search(const node<Key> * x, const Key k)
+{
     if (x == nullptr || k == x->key) {
         return x;
     }
