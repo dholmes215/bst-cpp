@@ -92,6 +92,32 @@ TEST(TreeSearchTest, Example12_2)
     ASSERT_EQ(search(21), nullptr);
 }
 
+TEST(IterativeTreeSearchTest, Example12_2)
+{
+    auto search = [&](const auto key) {
+        return iterative_tree_search(&example12_2, key);
+    };
+    ASSERT_EQ(search(1), nullptr);
+    ASSERT_EQ(search(2)->key, 2);
+    ASSERT_EQ(search(6)->key, 6);
+    ASSERT_EQ(search(9)->key, 9);
+    ASSERT_EQ(search(10), nullptr);
+    ASSERT_EQ(search(20)->key, 20);
+    ASSERT_EQ(search(21), nullptr);
+}
+
+TEST(TreeMinimumTest, Example12_2)
+{
+    auto min = tree_minimum(&example12_2);
+    ASSERT_EQ(min->key, 2);
+}
+
+TEST(TreeMaximumTest, Example12_2)
+{
+    auto max = tree_maximum(&example12_2);
+    ASSERT_EQ(max->key, 20);
+}
+
 int main(int argc, char ** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

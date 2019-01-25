@@ -43,6 +43,38 @@ const node<Key> * tree_search(const node<Key> * x, const Key k)
     }
 }
 
+template <typename Key>
+const node<Key> * iterative_tree_search(const node<Key> * x, const Key k)
+{
+    while (x != nullptr && k != x->key) {
+        if (k < x->key) {
+            x = x->left.get();
+        } else {
+            x = x->right.get();
+        }
+    }
+
+    return x;
+}
+
+template <typename Key>
+const node<Key> * tree_minimum(const node<Key> * x)
+{
+    while (x->left) {
+        x = x->left.get();
+    }
+    return x;
+}
+
+template <typename Key>
+const node<Key> * tree_maximum(const node<Key> * x)
+{
+    while (x->right) {
+        x = x->right.get();
+    }
+    return x;
+}
+
 } // namespace bst
 
 #endif // BST_BST_HPP
