@@ -36,7 +36,7 @@ const node<Key> * tree_search(const node<Key> * x, const Key k)
     if (x == nullptr || k == x->key) {
         return x;
     }
-    if (k < x->k) {
+    if (k < x->key) {
         return tree_search(x->left.get(), k);
     } else {
         return tree_search(x->right.get(), k);
