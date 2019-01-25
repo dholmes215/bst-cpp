@@ -19,7 +19,7 @@ addons:
 before_script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DCMAKE_BUILD_TYPE=Release
 
 script:
   # - sudo ln -s /usr/bin/gcc-8 /usr/local/bin/gcc
