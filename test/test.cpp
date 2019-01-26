@@ -145,6 +145,33 @@ TEST(TreeSuccessorTest, Example12_2)
     ASSERT_EQ(x, nullptr);
 }
 
+TEST(TreePredecessorTest, Example12_2)
+{
+    auto x = tree_maximum(example12_2.get());
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 18);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 17);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 15);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 13);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 9);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 7);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 6);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 4);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 3);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x->key, 2);
+    x = tree_predecessor(x);
+    ASSERT_EQ(x, nullptr);
+}
+
 int main(int argc, char ** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

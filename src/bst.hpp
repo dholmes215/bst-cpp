@@ -111,6 +111,19 @@ template <typename Key> const node<Key> * tree_successor(const node<Key> * x)
     return y;
 }
 
+template <typename Key> const node<Key> * tree_predecessor(const node<Key> * x)
+{
+    if (x->left()) {
+        return tree_maximum(x->left());
+    }
+    auto y = x->parent();
+    while (y && x == y->left()) {
+        x = y;
+        y = y->parent();
+    }
+    return y;
+}
+
 } // namespace bst
 
 #endif // BST_BST_HPP
