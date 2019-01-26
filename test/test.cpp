@@ -15,20 +15,20 @@ using I32Node = node<int32_t>;
 const unique_ptr<I32Node> example12_1_a = [] {
     auto example12_1_a = make_unique<I32Node>(5);
     example12_1_a->add_left(3);
-    example12_1_a->left->add_left(2);
-    example12_1_a->left->add_right(5);
+    example12_1_a->left()->add_left(2);
+    example12_1_a->left()->add_right(5);
     example12_1_a->add_right(7);
-    example12_1_a->right->add_right(8);
+    example12_1_a->right()->add_right(8);
     return example12_1_a;
 }();
 
 const unique_ptr<I32Node> example12_1_b = [] {
     auto example12_1_b = make_unique<I32Node>(2);
     example12_1_b->add_right(3);
-    example12_1_b->right->add_right(7);
-    example12_1_b->right->right->add_left(5);
-    example12_1_b->right->right->left->add_left(5);
-    example12_1_b->right->right->add_right(8);
+    example12_1_b->right()->add_right(7);
+    example12_1_b->right()->right()->add_left(5);
+    example12_1_b->right()->right()->left()->add_left(5);
+    example12_1_b->right()->right()->add_right(8);
     return example12_1_b;
 }();
 
@@ -37,15 +37,15 @@ const string example12_1StrExpected{"2\n3\n5\n5\n7\n8\n"};
 const unique_ptr<I32Node> example12_2 = [] {
     auto example12_2 = make_unique<I32Node>(15);
     example12_2->add_left(6);
-    example12_2->left->add_left(3);
-    example12_2->left->left->add_left(2);
-    example12_2->left->left->add_right(4);
-    example12_2->left->add_right(7);
-    example12_2->left->right->add_right(13);
-    example12_2->left->right->right->add_left(9);
+    example12_2->left()->add_left(3);
+    example12_2->left()->left()->add_left(2);
+    example12_2->left()->left()->add_right(4);
+    example12_2->left()->add_right(7);
+    example12_2->left()->right()->add_right(13);
+    example12_2->left()->right()->right()->add_left(9);
     example12_2->add_right(18);
-    example12_2->right->add_left(17);
-    example12_2->right->add_right(20);
+    example12_2->right()->add_left(17);
+    example12_2->right()->add_right(20);
     return example12_2;
 }();
 

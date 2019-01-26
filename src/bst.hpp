@@ -14,28 +14,34 @@ using std::unique_ptr;
 
 template <typename Key> struct node
 {
-    node(Key key) : key(key), left(nullptr), right(nullptr), p(nullptr) {}
+    node(Key key) : key(key), l(nullptr), r(nullptr), p(nullptr) {}
     node(node<Key> &&) = delete; // TODO Add move constructor later to fix
                                  // children's parent pointers
     node<Key> & operator=(node<Key> &&) = delete; // TODO Ditto
 
+    node * left() const { return l.get(); }
+    node * right() const { return r.get(); }
+    node * parent() const { return p; }
+
     node * add_left(Key key)
     {
-        left = make_unique<node>(key);
-        left->p = this;
-        return left.get();
+        l = make_unique<node>(key);
+        l->p = this;
+        return l.get();
     }
 
     node * add_right(Key key)
     {
-        right = make_unique<node>(key);
-        right->p = this;
-        return left.get();
+        r = make_unique<node>(key);
+        r->p = this;
+        return l.get();
     }
 
     Key key;
-    unique_ptr<node<Key>> left;
-    unique_ptr<node<Key>> right;
+
+private:
+    unique_ptr<node<Key>> l;
+    unique_ptr<node<Key>> r;
     node<Key> * p;
 };
 
@@ -43,9 +49,9 @@ template <typename Key>
 void inorder_tree_walk(ostream & stream, const node<Key> * x)
 {
     if (x != nullptr) {
-        inorder_tree_walk(stream, x->left.get());
+        inorder_tree_walk(stream, x->left());
         stream << x->key << '\n';
-        inorder_tree_walk(stream, x->right.get());
+        inorder_tree_walk(stream, x->right());
     }
 }
 
@@ -56,9 +62,9 @@ const node<Key> * tree_search(const node<Key> * x, const Key k)
         return x;
     }
     if (k < x->key) {
-        return tree_search(x->left.get(), k);
+        return tree_search(x->left(), k);
     } else {
-        return tree_search(x->right.get(), k);
+        return tree_search(x->right(), k);
     }
 }
 
@@ -67,9 +73,9 @@ const node<Key> * iterative_tree_search(const node<Key> * x, const Key k)
 {
     while (x != nullptr && k != x->key) {
         if (k < x->key) {
-            x = x->left.get();
+            x = x->left();
         } else {
-            x = x->right.get();
+            x = x->right();
         }
     }
 
@@ -78,29 +84,29 @@ const node<Key> * iterative_tree_search(const node<Key> * x, const Key k)
 
 template <typename Key> const node<Key> * tree_minimum(const node<Key> * x)
 {
-    while (x->left) {
-        x = x->left.get();
+    while (x->left()) {
+        x = x->left();
     }
     return x;
 }
 
 template <typename Key> const node<Key> * tree_maximum(const node<Key> * x)
 {
-    while (x->right) {
-        x = x->right.get();
+    while (x->right()) {
+        x = x->right();
     }
     return x;
 }
 
 template <typename Key> const node<Key> * tree_successor(const node<Key> * x)
 {
-    if (x->right) {
-        return tree_minimum(x->right.get());
+    if (x->right()) {
+        return tree_minimum(x->right());
     }
-    auto y = x->p;
-    while (y && x == y->right.get()) {
+    auto y = x->parent();
+    while (y && x == y->right()) {
         x = y;
-        y = y->p;
+        y = y->parent();
     }
     return y;
 }
