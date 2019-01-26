@@ -8,12 +8,31 @@
 
 namespace bst {
 
+using std::make_unique;
 using std::ostream;
 using std::unique_ptr;
 
 template <typename Key> struct node
 {
     node(Key key) : key(key), left(nullptr), right(nullptr), p(nullptr) {}
+    node(node<Key> &&) = delete; // TODO Add move constructor later to fix
+                                 // children's parent pointers
+    node<Key> & operator=(node<Key> &&) = delete; // TODO Ditto
+
+    node * add_left(Key key)
+    {
+        left = make_unique<node>(key);
+        left->p = this;
+        return left.get();
+    }
+
+    node * add_right(Key key)
+    {
+        right = make_unique<node>(key);
+        right->p = this;
+        return left.get();
+    }
+
     Key key;
     unique_ptr<node<Key>> left;
     unique_ptr<node<Key>> right;
@@ -57,8 +76,7 @@ const node<Key> * iterative_tree_search(const node<Key> * x, const Key k)
     return x;
 }
 
-template <typename Key>
-const node<Key> * tree_minimum(const node<Key> * x)
+template <typename Key> const node<Key> * tree_minimum(const node<Key> * x)
 {
     while (x->left) {
         x = x->left.get();
@@ -66,13 +84,25 @@ const node<Key> * tree_minimum(const node<Key> * x)
     return x;
 }
 
-template <typename Key>
-const node<Key> * tree_maximum(const node<Key> * x)
+template <typename Key> const node<Key> * tree_maximum(const node<Key> * x)
 {
     while (x->right) {
         x = x->right.get();
     }
     return x;
+}
+
+template <typename Key> const node<Key> * tree_successor(const node<Key> * x)
+{
+    if (x->right) {
+        return tree_minimum(x->right.get());
+    }
+    auto y = x->p;
+    while (y && x == y->right.get()) {
+        x = y;
+        y = y->p;
+    }
+    return y;
 }
 
 } // namespace bst

@@ -12,40 +12,40 @@ using namespace std;
 
 using I32Node = node<int32_t>;
 
-const I32Node example12_1_a = [] {
-    I32Node example12_1_a{5};
-    example12_1_a.left = make_unique<I32Node>(3);
-    example12_1_a.left->left = make_unique<I32Node>(2);
-    example12_1_a.left->right = make_unique<I32Node>(5);
-    example12_1_a.right = make_unique<I32Node>(7);
-    example12_1_a.right->right = make_unique<I32Node>(8);
+const unique_ptr<I32Node> example12_1_a = [] {
+    auto example12_1_a = make_unique<I32Node>(5);
+    example12_1_a->add_left(3);
+    example12_1_a->left->add_left(2);
+    example12_1_a->left->add_right(5);
+    example12_1_a->add_right(7);
+    example12_1_a->right->add_right(8);
     return example12_1_a;
 }();
 
-const I32Node example12_1_b = [] {
-    I32Node example12_1_b{2};
-    example12_1_b.right = make_unique<I32Node>(3);
-    example12_1_b.right->right = make_unique<I32Node>(7);
-    example12_1_b.right->right->left = make_unique<I32Node>(5);
-    example12_1_b.right->right->left->left = make_unique<I32Node>(5);
-    example12_1_b.right->right->right = make_unique<I32Node>(8);
+const unique_ptr<I32Node> example12_1_b = [] {
+    auto example12_1_b = make_unique<I32Node>(2);
+    example12_1_b->add_right(3);
+    example12_1_b->right->add_right(7);
+    example12_1_b->right->right->add_left(5);
+    example12_1_b->right->right->left->add_left(5);
+    example12_1_b->right->right->add_right(8);
     return example12_1_b;
 }();
 
 const string example12_1StrExpected{"2\n3\n5\n5\n7\n8\n"};
 
-const I32Node example12_2 = [] {
-    I32Node example12_2{15};
-    example12_2.left = make_unique<I32Node>(6);
-    example12_2.left->left = make_unique<I32Node>(3);
-    example12_2.left->left->left = make_unique<I32Node>(2);
-    example12_2.left->left->right = make_unique<I32Node>(4);
-    example12_2.left->right = make_unique<I32Node>(7);
-    example12_2.left->right->right = make_unique<I32Node>(13);
-    example12_2.left->right->right->left = make_unique<I32Node>(9);
-    example12_2.right = make_unique<I32Node>(18);
-    example12_2.right->left = make_unique<I32Node>(17);
-    example12_2.right->right = make_unique<I32Node>(20);
+const unique_ptr<I32Node> example12_2 = [] {
+    auto example12_2 = make_unique<I32Node>(15);
+    example12_2->add_left(6);
+    example12_2->left->add_left(3);
+    example12_2->left->left->add_left(2);
+    example12_2->left->left->add_right(4);
+    example12_2->left->add_right(7);
+    example12_2->left->right->add_right(13);
+    example12_2->left->right->right->add_left(9);
+    example12_2->add_right(18);
+    example12_2->right->add_left(17);
+    example12_2->right->add_right(20);
     return example12_2;
 }();
 
@@ -54,7 +54,7 @@ const string example12_2StrExpected{"2\n3\n4\n6\n7\n9\n13\n15\n17\n18\n20\n"};
 TEST(InorderTreeWalkTest, Example12_1_a)
 {
     stringstream ss;
-    inorder_tree_walk(ss, &example12_1_a);
+    inorder_tree_walk(ss, example12_1_a.get());
     string str{istreambuf_iterator<char>(ss), {}};
 
     ASSERT_EQ(str, example12_1StrExpected);
@@ -63,7 +63,7 @@ TEST(InorderTreeWalkTest, Example12_1_a)
 TEST(InorderTreeWalkTest, Example12_1_b)
 {
     stringstream ss;
-    inorder_tree_walk(ss, &example12_1_b);
+    inorder_tree_walk(ss, example12_1_b.get());
     string str{istreambuf_iterator<char>(ss), {}};
 
     ASSERT_EQ(str, example12_1StrExpected);
@@ -72,7 +72,7 @@ TEST(InorderTreeWalkTest, Example12_1_b)
 TEST(InorderTreeWalkTest, Example12_2)
 {
     stringstream ss;
-    inorder_tree_walk(ss, &example12_2);
+    inorder_tree_walk(ss, example12_2.get());
     string str{istreambuf_iterator<char>(ss), {}};
 
     ASSERT_EQ(str, example12_2StrExpected);
@@ -81,7 +81,7 @@ TEST(InorderTreeWalkTest, Example12_2)
 TEST(TreeSearchTest, Example12_2)
 {
     auto search = [&](const auto key) {
-        return tree_search(&example12_2, key);
+        return tree_search(example12_2.get(), key);
     };
     ASSERT_EQ(search(1), nullptr);
     ASSERT_EQ(search(2)->key, 2);
@@ -95,7 +95,7 @@ TEST(TreeSearchTest, Example12_2)
 TEST(IterativeTreeSearchTest, Example12_2)
 {
     auto search = [&](const auto key) {
-        return iterative_tree_search(&example12_2, key);
+        return iterative_tree_search(example12_2.get(), key);
     };
     ASSERT_EQ(search(1), nullptr);
     ASSERT_EQ(search(2)->key, 2);
@@ -108,14 +108,41 @@ TEST(IterativeTreeSearchTest, Example12_2)
 
 TEST(TreeMinimumTest, Example12_2)
 {
-    auto min = tree_minimum(&example12_2);
+    auto min = tree_minimum(example12_2.get());
     ASSERT_EQ(min->key, 2);
 }
 
 TEST(TreeMaximumTest, Example12_2)
 {
-    auto max = tree_maximum(&example12_2);
+    auto max = tree_maximum(example12_2.get());
     ASSERT_EQ(max->key, 20);
+}
+
+TEST(TreeSuccessorTest, Example12_2)
+{
+    auto x = tree_minimum(example12_2.get());
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 3);
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 4);
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 6);
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 7);
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 9);
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 13);
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 15);
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 17);
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 18);
+    x = tree_successor(x);
+    ASSERT_EQ(x->key, 20);
+    x = tree_successor(x);
+    ASSERT_EQ(x, nullptr);
 }
 
 int main(int argc, char ** argv)
