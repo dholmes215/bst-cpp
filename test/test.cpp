@@ -84,11 +84,11 @@ TEST(TreeSearchTest, Example12_2)
         return tree_search(example12_2.get(), key);
     };
     ASSERT_EQ(search(1), nullptr);
-    ASSERT_EQ(search(2)->key, 2);
-    ASSERT_EQ(search(6)->key, 6);
-    ASSERT_EQ(search(9)->key, 9);
+    ASSERT_EQ(search(2)->key(), 2);
+    ASSERT_EQ(search(6)->key(), 6);
+    ASSERT_EQ(search(9)->key(), 9);
     ASSERT_EQ(search(10), nullptr);
-    ASSERT_EQ(search(20)->key, 20);
+    ASSERT_EQ(search(20)->key(), 20);
     ASSERT_EQ(search(21), nullptr);
 }
 
@@ -98,49 +98,49 @@ TEST(IterativeTreeSearchTest, Example12_2)
         return iterative_tree_search(example12_2.get(), key);
     };
     ASSERT_EQ(search(1), nullptr);
-    ASSERT_EQ(search(2)->key, 2);
-    ASSERT_EQ(search(6)->key, 6);
-    ASSERT_EQ(search(9)->key, 9);
+    ASSERT_EQ(search(2)->key(), 2);
+    ASSERT_EQ(search(6)->key(), 6);
+    ASSERT_EQ(search(9)->key(), 9);
     ASSERT_EQ(search(10), nullptr);
-    ASSERT_EQ(search(20)->key, 20);
+    ASSERT_EQ(search(20)->key(), 20);
     ASSERT_EQ(search(21), nullptr);
 }
 
 TEST(TreeMinimumTest, Example12_2)
 {
     auto min = tree_minimum(example12_2.get());
-    ASSERT_EQ(min->key, 2);
+    ASSERT_EQ(min->key(), 2);
 }
 
 TEST(TreeMaximumTest, Example12_2)
 {
     auto max = tree_maximum(example12_2.get());
-    ASSERT_EQ(max->key, 20);
+    ASSERT_EQ(max->key(), 20);
 }
 
 TEST(TreeSuccessorTest, Example12_2)
 {
     auto x = tree_minimum(example12_2.get());
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 3);
+    ASSERT_EQ(x->key(), 3);
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 4);
+    ASSERT_EQ(x->key(), 4);
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 6);
+    ASSERT_EQ(x->key(), 6);
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 7);
+    ASSERT_EQ(x->key(), 7);
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 9);
+    ASSERT_EQ(x->key(), 9);
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 13);
+    ASSERT_EQ(x->key(), 13);
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 15);
+    ASSERT_EQ(x->key(), 15);
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 17);
+    ASSERT_EQ(x->key(), 17);
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 18);
+    ASSERT_EQ(x->key(), 18);
     x = tree_successor(x);
-    ASSERT_EQ(x->key, 20);
+    ASSERT_EQ(x->key(), 20);
     x = tree_successor(x);
     ASSERT_EQ(x, nullptr);
 }
@@ -149,27 +149,71 @@ TEST(TreePredecessorTest, Example12_2)
 {
     auto x = tree_maximum(example12_2.get());
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 18);
+    ASSERT_EQ(x->key(), 18);
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 17);
+    ASSERT_EQ(x->key(), 17);
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 15);
+    ASSERT_EQ(x->key(), 15);
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 13);
+    ASSERT_EQ(x->key(), 13);
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 9);
+    ASSERT_EQ(x->key(), 9);
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 7);
+    ASSERT_EQ(x->key(), 7);
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 6);
+    ASSERT_EQ(x->key(), 6);
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 4);
+    ASSERT_EQ(x->key(), 4);
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 3);
+    ASSERT_EQ(x->key(), 3);
     x = tree_predecessor(x);
-    ASSERT_EQ(x->key, 2);
+    ASSERT_EQ(x->key(), 2);
     x = tree_predecessor(x);
     ASSERT_EQ(x, nullptr);
+}
+
+TEST(MultisetInsertTest, Example12_2)
+{
+    bst::multiset<int32_t> s;
+    s.insert(5);
+    s.insert(3);
+    s.insert(7);
+    s.insert(2);
+    s.insert(5);
+    s.insert(8);
+
+    vector<int32_t> expected = {2, 3, 5, 5, 7, 8};
+    vector<int32_t> actual(s.begin(), s.end());
+    ASSERT_EQ(actual, expected);
+
+    auto iter = s.begin();
+    ASSERT_EQ(*iter, 2);
+    ASSERT_EQ(*(++iter), 3);
+    ASSERT_EQ(*(++iter), 5);
+    ASSERT_EQ(*(++iter), 5);
+    ASSERT_EQ(*(++iter), 7);
+    ASSERT_EQ(*(++iter), 8);
+    ASSERT_EQ(++iter, s.end());
+}
+
+TEST(MultisetIteratorTest, Example12_2)
+{
+    bst::multiset<int32_t> s;
+    s.insert(5);
+    s.insert(3);
+    s.insert(7);
+    s.insert(2);
+    s.insert(5);
+    s.insert(8);
+
+    auto iter = s.begin();
+    ASSERT_EQ(*iter, 2);
+    ASSERT_EQ(*(++iter), 3);
+    ASSERT_EQ(*(++iter), 5);
+    ASSERT_EQ(*(++iter), 5);
+    ASSERT_EQ(*(++iter), 7);
+    ASSERT_EQ(*(++iter), 8);
+    ASSERT_EQ(++iter, s.end());
 }
 
 int main(int argc, char ** argv)
